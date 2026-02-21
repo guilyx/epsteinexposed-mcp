@@ -1,109 +1,103 @@
-# Credits: Erwin Lejeune — 2026-02-21
-"""Tests for the EpsteinClient HTTP wrapper."""
+# Credits: Erwin Lejeune — 2026-02-22
+"""Tests verifying the epsteinexposed package integration.
+
+The package itself is fully tested in its own repo; here we verify the MCP
+server's dependency works correctly in this context.
+"""
 
 from __future__ import annotations
 
-import httpx
 import pytest
 import respx
 from httpx import Response
 
-from src.epstein_client import EpsteinClient
+from epsteinexposed import AsyncEpsteinExposed, EpsteinExposedNotFoundError
 
-BASE = "https://epsteinexposed.com/api"
-
-
-@pytest.fixture()
-def client():
-    return EpsteinClient(base_url=BASE)
+BASE = "https://epsteinexposed.com/api/v1"
 
 
-@respx.mock
-@pytest.mark.asyncio
-async def test_search_persons(client: EpsteinClient):
-    mock_data = [{"name": "John Doe", "id": "1"}]
-    respx.get(f"{BASE}/persons").mock(return_value=Response(200, json=mock_data))
+def _envelope(data, total=None):
+    return {
+        "status": "ok",
+        "data": data,
+        "meta": {
+            "total": total or len(data),
+            "page": 1,
+            "per_page": 20,
+            "timestamp": "2026-02-22T00:00:00.000Z",
+        },
+    }
 
-    result = await client.search_persons("John")
-    assert result == mock_data
 
-
-@respx.mock
-@pytest.mark.asyncio
-async def test_get_person(client: EpsteinClient):
-    mock_data = {"name": "Jane Smith", "id": "42"}
-    respx.get(f"{BASE}/persons/42").mock(return_value=Response(200, json=mock_data))
-
-    result = await client.get_person("42")
-    assert result["name"] == "Jane Smith"
+@pytest.fixture
+async def client():
+    async with AsyncEpsteinExposed(base_url=BASE) as c:
+        yield c
 
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_list_persons(client: EpsteinClient):
-    mock_data = {"results": [{"name": "A"}, {"name": "B"}]}
-    respx.get(f"{BASE}/persons").mock(return_value=Response(200, json=mock_data))
-
-    result = await client.list_persons(page=1, per_page=10)
-    assert "results" in result
-
-
-@respx.mock
-@pytest.mark.asyncio
-async def test_get_document(client: EpsteinClient):
-    mock_data = {"id": "doc-1", "title": "Flight Log"}
-    respx.get(f"{BASE}/documents/doc-1").mock(return_value=Response(200, json=mock_data))
-
-    result = await client.get_document("doc-1")
-    assert result["title"] == "Flight Log"
+async def test_search_persons(client):
+    respx.get(f"{BASE}/persons").mock(
+        return_value=Response(200, json=_envelope([{"id": 1, "name": "Test", "slug": "test"}]))
+    )
+    result = await client.search_persons(q="Test")
+    assert len(result.data) == 1
+    assert result.data[0].name == "Test"
 
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_list_documents(client: EpsteinClient):
-    mock_data = [{"id": "doc-1"}, {"id": "doc-2"}]
-    respx.get(f"{BASE}/documents").mock(return_value=Response(200, json=mock_data))
-
-    result = await client.list_documents()
-    assert len(result) == 2
-
-
-@respx.mock
-@pytest.mark.asyncio
-async def test_list_documents_with_category(client: EpsteinClient):
-    mock_data = [{"id": "doc-3", "category": "legal"}]
-    respx.get(f"{BASE}/documents").mock(return_value=Response(200, json=mock_data))
-
-    result = await client.list_documents(category="legal")
-    assert len(result) == 1
+async def test_get_person(client):
+    respx.get(f"{BASE}/persons/bill-clinton").mock(
+        return_value=Response(200, json={
+            "data": {"id": 1, "name": "Bill Clinton", "slug": "bill-clinton", "bio": "42nd POTUS"}
+        })
+    )
+    result = await client.get_person("bill-clinton")
+    assert result.name == "Bill Clinton"
 
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_get_person_mentions(client: EpsteinClient):
-    mock_data = {"query": "John", "results": []}
-    respx.get(f"{BASE}/mentions").mock(return_value=Response(200, json=mock_data))
-
-    result = await client.get_person_mentions("John")
-    assert result["query"] == "John"
+async def test_get_person_not_found(client):
+    respx.get(f"{BASE}/persons/nobody").mock(return_value=Response(404))
+    with pytest.raises(EpsteinExposedNotFoundError):
+        await client.get_person("nobody")
 
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_get_person_mentions_fallback(client: EpsteinClient):
-    """When /mentions returns 404, should fall back to search_persons."""
-    respx.get(f"{BASE}/mentions").mock(return_value=Response(404))
-    mock_persons = [{"name": "John Doe"}]
-    respx.get(f"{BASE}/persons").mock(return_value=Response(200, json=mock_persons))
-
-    result = await client.get_person_mentions("John")
-    assert "results" in result
+async def test_search_documents(client):
+    respx.get(f"{BASE}/documents").mock(
+        return_value=Response(200, json=_envelope([{"id": "d1", "title": "Deposition"}]))
+    )
+    result = await client.search_documents(q="deposition")
+    assert len(result.data) == 1
 
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_search_persons_http_error(client: EpsteinClient):
-    respx.get(f"{BASE}/persons").mock(return_value=Response(500))
+async def test_search_flights(client):
+    respx.get(f"{BASE}/flights").mock(
+        return_value=Response(200, json=_envelope([{
+            "id": 1, "origin": "TIST", "passengerNames": ["A"], "passengerIds": [1],
+            "passengerCount": 1,
+        }]))
+    )
+    result = await client.search_flights(passenger="A")
+    assert result.data[0].origin == "TIST"
 
-    with pytest.raises(httpx.HTTPStatusError):
-        await client.search_persons("test")
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_cross_search(client):
+    respx.get(f"{BASE}/search").mock(
+        return_value=Response(200, json={
+            "status": "ok",
+            "documents": {"results": [{"id": "d1"}]},
+            "emails": {"results": []},
+        })
+    )
+    result = await client.search(q="wexner")
+    assert len(result.documents.results) == 1
