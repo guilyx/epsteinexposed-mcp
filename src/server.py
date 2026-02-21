@@ -17,7 +17,7 @@ from src.epstein_client import EpsteinClient
 # ── MCP Server definition ─────────────────────────────────────
 mcp = FastMCP(
     "Epstein Files",
-    description="MCP server providing access to the Epstein Exposed public API — "
+    instructions="MCP server providing access to the Epstein Exposed public API — "
     "search persons, retrieve documents, and get mention context.",
 )
 
