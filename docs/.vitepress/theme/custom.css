@@ -1,0 +1,185 @@
+/* ─── Typemachine Cyberpunk Theme ─────────────────────────────
+   Palette:
+     Ink Black      #0d1b2a
+     Prussian Blue  #1b263b
+     Dusk Blue      #415a77
+     Lavender Grey  #778da9
+     Alabaster Grey #e0e1dd
+   ─────────────────────────────────────────────────────────── */
+
+/* ── Color overrides (dark mode — default) ─────────────────── */
+:root {
+  --vp-c-brand-1: #778da9;
+  --vp-c-brand-2: #415a77;
+  --vp-c-brand-3: #1b263b;
+  --vp-c-brand-soft: rgba(119, 141, 169, 0.14);
+
+  --vp-c-tip-1: #778da9;
+  --vp-c-tip-soft: rgba(119, 141, 169, 0.14);
+}
+
+.dark {
+  --vp-c-bg: #0d1b2a;
+  --vp-c-bg-alt: #1b263b;
+  --vp-c-bg-elv: #1b263b;
+  --vp-c-bg-soft: #1b263b;
+
+  --vp-c-text-1: #e0e1dd;
+  --vp-c-text-2: #778da9;
+  --vp-c-text-3: #415a77;
+
+  --vp-c-divider: #415a7744;
+
+  --vp-c-brand-1: #778da9;
+  --vp-c-brand-2: #e0e1dd;
+  --vp-c-brand-3: #415a77;
+  --vp-c-brand-soft: rgba(119, 141, 169, 0.16);
+
+  --vp-code-block-bg: #0d1b2a;
+  --vp-code-line-highlight-color: rgba(65, 90, 119, 0.3);
+
+  --vp-c-default-1: #415a77;
+  --vp-c-default-2: #1b263b;
+  --vp-c-default-3: #0d1b2a;
+  --vp-c-default-soft: rgba(27, 38, 59, 0.4);
+
+  --vp-sidebar-bg-color: #0d1b2a;
+
+  --vp-nav-bg-color: #0d1b2aee;
+}
+
+/* Light mode — same palette, slightly inverted */
+:root:not(.dark) {
+  --vp-c-bg: #e0e1dd;
+  --vp-c-bg-alt: #d1d2ce;
+  --vp-c-bg-elv: #f5f5f3;
+  --vp-c-bg-soft: #d1d2ce;
+
+  --vp-c-text-1: #0d1b2a;
+  --vp-c-text-2: #1b263b;
+  --vp-c-text-3: #415a77;
+
+  --vp-c-divider: #415a7733;
+
+  --vp-c-brand-1: #415a77;
+  --vp-c-brand-2: #1b263b;
+  --vp-c-brand-3: #778da9;
+
+  --vp-code-block-bg: #1b263b;
+  --vp-code-line-highlight-color: rgba(65, 90, 119, 0.2);
+}
+
+/* ── Typography — Typemachine feel ─────────────────────────── */
+
+:root {
+  --vp-font-family-base: "JetBrains Mono", "Courier New", Courier, monospace;
+  --vp-font-family-mono: "JetBrains Mono", "Courier New", Courier, monospace;
+}
+
+/* Hero title uses the typewriter-style Special Elite font */
+.VPHero .name {
+  font-family: "Special Elite", "Courier New", monospace !important;
+  letter-spacing: 0.04em;
+}
+
+.VPHero .text {
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.VPHero .tagline {
+  font-family: "JetBrains Mono", monospace !important;
+  opacity: 0.85;
+}
+
+/* ── Blinking cursor after hero title ──────────────────────── */
+.VPHero .name::after {
+  content: "█";
+  animation: blink 1s step-end infinite;
+  color: var(--vp-c-brand-1);
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Subtle scanline overlay (dark mode only) ──────────────── */
+.dark .VPContent {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(119, 141, 169, 0.03) 2px,
+    rgba(119, 141, 169, 0.03) 4px
+  );
+}
+
+/* ── Code blocks ───────────────────────────────────────────── */
+.dark .vp-code-group .tabs label,
+.dark div[class*="language-"] {
+  font-family: "JetBrains Mono", monospace;
+  border: 1px solid #415a7733;
+}
+
+.dark div[class*="language-"] code {
+  color: #e0e1dd;
+}
+
+/* ── Sidebar styling ───────────────────────────────────────── */
+.dark .VPSidebar {
+  border-right: 1px solid #415a7733;
+}
+
+.dark .VPSidebar .VPSidebarItem.is-active > .item .link > .text {
+  color: #e0e1dd;
+}
+
+/* ── Nav bar bottom border ─────────────────────────────────── */
+.dark .VPNav {
+  border-bottom: 1px solid #415a7744;
+}
+
+/* ── Custom container styling ──────────────────────────────── */
+.dark .custom-block.tip {
+  border-color: #778da9;
+  background-color: rgba(119, 141, 169, 0.08);
+}
+
+.dark .custom-block.warning {
+  border-color: #d4a574;
+  background-color: rgba(212, 165, 116, 0.08);
+}
+
+.dark .custom-block.danger {
+  border-color: #c45d5d;
+  background-color: rgba(196, 93, 93, 0.08);
+}
+
+/* ── Feature cards ─────────────────────────────────────────── */
+.dark .VPFeature {
+  border: 1px solid #415a7744;
+  background-color: #1b263b;
+}
+
+.dark .VPFeature:hover {
+  border-color: #778da9;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+.dark ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0d1b2a;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #415a77;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #778da9;
+}

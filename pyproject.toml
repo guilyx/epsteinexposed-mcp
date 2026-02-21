@@ -26,5 +26,8 @@ dev = [
 asyncio_mode = "auto"
 testpaths = ["tests"]
 
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
 [project.scripts]
 epstein-mcp = "src.server:main"

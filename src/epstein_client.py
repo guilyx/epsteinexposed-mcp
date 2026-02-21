@@ -13,18 +13,33 @@ _TIMEOUT = 30.0
 
 
 class EpsteinClient:
-    """Thin async wrapper around the Epstein Exposed public API."""
+    """Thin async wrapper around the Epstein Exposed public API.
+
+    Supports use as an async context manager for proper resource cleanup::
+
+        async with EpsteinClient() as client:
+            persons = await client.search_persons("Doe")
+    """
 
     def __init__(self, base_url: str = BASE_URL) -> None:
         self._base = base_url.rstrip("/")
         self._http = httpx.AsyncClient(timeout=_TIMEOUT, base_url=self._base)
 
     async def close(self) -> None:
+        """Close the underlying HTTP transport."""
         await self._http.aclose()
+
+    async def __aenter__(self) -> EpsteinClient:
+        return self
+
+    async def __aexit__(self, *exc: object) -> None:
+        await self.close()
 
     # ── Persons ────────────────────────────────────────────────
 
-    async def search_persons(self, name: str, page: int = 1, per_page: int = 50) -> dict[str, Any]:
+    async def search_persons(
+        self, name: str, page: int = 1, per_page: int = 50
+    ) -> dict[str, Any]:
         """Search the Epstein files for a person by name.
 
         Expected endpoint: GET /persons?search=<name>&page=<n>&per_page=<n>
