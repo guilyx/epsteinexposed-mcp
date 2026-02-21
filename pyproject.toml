@@ -17,8 +17,14 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "respx>=0.22.0",
     "ruff>=0.7.0",
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
 
 [project.scripts]
 epstein-mcp = "src.server:main"
