@@ -1,0 +1,10 @@
+# Credits: Erwin Lejeune — 2026-02-21
+target-version = "py312"
+line-length = 100
+
+[lint]
+select = ["E", "W", "F", "I", "B", "UP", "RUF"]
+ignore = ["E501"]
+
+[lint.isort]
+known-first-party = ["src"]
