@@ -1,4 +1,4 @@
-# Credits: Erwin Lejeune — 2026-02-22
+# Credits: Erwin Lejeune — 2026-02-23
 """Tests verifying the epsteinexposed package integration.
 
 The package itself is fully tested in its own repo; here we verify the MCP
@@ -7,13 +7,30 @@ server's dependency works correctly in this context.
 
 from __future__ import annotations
 
+import json
+from dataclasses import dataclass, field
+from typing import Any
+from unittest.mock import AsyncMock, patch
+
 import pytest
-import respx
-from httpx import Response
 
 from epsteinexposed import AsyncEpsteinExposed, EpsteinExposedNotFoundError
 
 BASE = "https://epsteinexposed.com/api/v1"
+MOCK_TARGET = "curl_cffi.requests.AsyncSession.get"
+
+
+@dataclass
+class FakeResponse:
+    status_code: int = 200
+    _json: dict[str, Any] | None = None
+    _text: str = ""
+    headers: dict[str, str] = field(default_factory=dict)
+
+    def json(self) -> Any:
+        if self._json is not None:
+            return self._json
+        return json.loads(self._text)
 
 
 def _envelope(data, total=None):
@@ -35,69 +52,67 @@ async def client():
         yield c
 
 
-@respx.mock
 @pytest.mark.asyncio
 async def test_search_persons(client):
-    respx.get(f"{BASE}/persons").mock(
-        return_value=Response(200, json=_envelope([{"id": 1, "name": "Test", "slug": "test"}]))
-    )
-    result = await client.search_persons(q="Test")
+    with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
+        mock_get.return_value = FakeResponse(
+            _json=_envelope([{"id": 1, "name": "Test", "slug": "test"}])
+        )
+        result = await client.search_persons(q="Test")
     assert len(result.data) == 1
     assert result.data[0].name == "Test"
 
 
-@respx.mock
 @pytest.mark.asyncio
 async def test_get_person(client):
-    respx.get(f"{BASE}/persons/bill-clinton").mock(
-        return_value=Response(200, json={
-            "data": {"id": 1, "name": "Bill Clinton", "slug": "bill-clinton", "bio": "42nd POTUS"}
-        })
-    )
-    result = await client.get_person("bill-clinton")
+    with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
+        mock_get.return_value = FakeResponse(
+            _json={"data": {"id": 1, "name": "Bill Clinton", "slug": "bill-clinton", "bio": "42nd POTUS"}}
+        )
+        result = await client.get_person("bill-clinton")
     assert result.name == "Bill Clinton"
 
 
-@respx.mock
 @pytest.mark.asyncio
 async def test_get_person_not_found(client):
-    respx.get(f"{BASE}/persons/nobody").mock(return_value=Response(404))
-    with pytest.raises(EpsteinExposedNotFoundError):
-        await client.get_person("nobody")
+    with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
+        mock_get.return_value = FakeResponse(status_code=404, _text="Not Found")
+        with pytest.raises(EpsteinExposedNotFoundError):
+            await client.get_person("nobody")
 
 
-@respx.mock
 @pytest.mark.asyncio
 async def test_search_documents(client):
-    respx.get(f"{BASE}/documents").mock(
-        return_value=Response(200, json=_envelope([{"id": "d1", "title": "Deposition"}]))
-    )
-    result = await client.search_documents(q="deposition")
+    with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
+        mock_get.return_value = FakeResponse(
+            _json=_envelope([{"id": "d1", "title": "Deposition"}])
+        )
+        result = await client.search_documents(q="deposition")
     assert len(result.data) == 1
 
 
-@respx.mock
 @pytest.mark.asyncio
 async def test_search_flights(client):
-    respx.get(f"{BASE}/flights").mock(
-        return_value=Response(200, json=_envelope([{
-            "id": 1, "origin": "TIST", "passengerNames": ["A"], "passengerIds": [1],
-            "passengerCount": 1,
-        }]))
-    )
-    result = await client.search_flights(passenger="A")
+    with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
+        mock_get.return_value = FakeResponse(
+            _json=_envelope([{
+                "id": 1, "origin": "TIST", "passengerNames": ["A"],
+                "passengerIds": [1], "passengerCount": 1,
+            }])
+        )
+        result = await client.search_flights(passenger="A")
     assert result.data[0].origin == "TIST"
 
 
-@respx.mock
 @pytest.mark.asyncio
 async def test_cross_search(client):
-    respx.get(f"{BASE}/search").mock(
-        return_value=Response(200, json={
-            "status": "ok",
-            "documents": {"results": [{"id": "d1"}]},
-            "emails": {"results": []},
-        })
-    )
-    result = await client.search(q="wexner")
+    with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
+        mock_get.return_value = FakeResponse(
+            _json={
+                "status": "ok",
+                "documents": {"results": [{"id": "d1"}]},
+                "emails": {"results": []},
+            }
+        )
+        result = await client.search(q="wexner")
     assert len(result.documents.results) == 1
