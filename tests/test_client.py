@@ -13,7 +13,6 @@ from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
-
 from epsteinexposed import AsyncEpsteinExposed, EpsteinExposedNotFoundError
 
 BASE = "https://epsteinexposed.com/api/v1"
@@ -67,7 +66,14 @@ async def test_search_persons(client):
 async def test_get_person(client):
     with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
         mock_get.return_value = FakeResponse(
-            _json={"data": {"id": 1, "name": "Bill Clinton", "slug": "bill-clinton", "bio": "42nd POTUS"}}
+            _json={
+                "data": {
+                    "id": 1,
+                    "name": "Bill Clinton",
+                    "slug": "bill-clinton",
+                    "bio": "42nd POTUS",
+                }
+            }
         )
         result = await client.get_person("bill-clinton")
     assert result.name == "Bill Clinton"
@@ -84,9 +90,7 @@ async def test_get_person_not_found(client):
 @pytest.mark.asyncio
 async def test_search_documents(client):
     with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
-        mock_get.return_value = FakeResponse(
-            _json=_envelope([{"id": "d1", "title": "Deposition"}])
-        )
+        mock_get.return_value = FakeResponse(_json=_envelope([{"id": "d1", "title": "Deposition"}]))
         result = await client.search_documents(q="deposition")
     assert len(result.data) == 1
 
@@ -95,10 +99,17 @@ async def test_search_documents(client):
 async def test_search_flights(client):
     with patch(MOCK_TARGET, new_callable=AsyncMock) as mock_get:
         mock_get.return_value = FakeResponse(
-            _json=_envelope([{
-                "id": 1, "origin": "TIST", "passengerNames": ["A"],
-                "passengerIds": [1], "passengerCount": 1,
-            }])
+            _json=_envelope(
+                [
+                    {
+                        "id": 1,
+                        "origin": "TIST",
+                        "passengerNames": ["A"],
+                        "passengerIds": [1],
+                        "passengerCount": 1,
+                    }
+                ]
+            )
         )
         result = await client.search_flights(passenger="A")
     assert result.data[0].origin == "TIST"

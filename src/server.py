@@ -12,9 +12,8 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from mcp.server.fastmcp import FastMCP
-
 from epsteinexposed import AsyncEpsteinExposed
+from mcp.server.fastmcp import FastMCP
 
 # ── MCP Server definition ─────────────────────────────────────
 mcp = FastMCP(
@@ -34,11 +33,13 @@ def _to_text(data: Any) -> str:
 
 def _dump_paginated(resp: Any) -> str:
     """Serialize a PaginatedResponse to JSON."""
-    return _to_text({
-        "status": resp.status,
-        "data": [item.model_dump(by_alias=True) for item in resp.data],
-        "meta": resp.meta.model_dump(),
-    })
+    return _to_text(
+        {
+            "status": resp.status,
+            "data": [item.model_dump(by_alias=True) for item in resp.data],
+            "meta": resp.meta.model_dump(),
+        }
+    )
 
 
 # ── Person Tools ──────────────────────────────────────────────
@@ -139,8 +140,12 @@ async def search_flights(
         JSON with flight records including date, route, aircraft, pilot, and passengers.
     """
     result = await _client.search_flights(
-        passenger=passenger, year=year, origin=origin, destination=destination,
-        page=page, per_page=per_page,
+        passenger=passenger,
+        year=year,
+        origin=origin,
+        destination=destination,
+        page=page,
+        per_page=per_page,
     )
     return _dump_paginated(result)
 

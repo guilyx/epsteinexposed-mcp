@@ -7,7 +7,6 @@ import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
-
 from epsteinexposed.models import (
     Document,
     Flight,
@@ -18,6 +17,7 @@ from epsteinexposed.models import (
     PersonStats,
     SearchResults,
 )
+
 from src.server import (
     _to_text,
     cross_search,
@@ -27,7 +27,6 @@ from src.server import (
     search_flights,
     search_persons,
 )
-
 
 # ── Helper tests ──────────────────────────────────────────────
 
@@ -106,7 +105,9 @@ async def test_search_persons_returns_json():
 @pytest.mark.asyncio
 async def test_search_persons_with_category():
     mock = _paginated_persons([])
-    with patch("src.server._client.search_persons", new_callable=AsyncMock, return_value=mock) as fn:
+    with patch(
+        "src.server._client.search_persons", new_callable=AsyncMock, return_value=mock
+    ) as fn:
         await search_persons("X", category="politician")
     fn.assert_called_once_with(q="X", category="politician", page=1, per_page=20)
 
@@ -153,9 +154,7 @@ async def test_search_documents_with_filters():
         "src.server._client.search_documents", new_callable=AsyncMock, return_value=mock
     ) as fn:
         await search_documents(query="test", source="fbi", category="deposition")
-    fn.assert_called_once_with(
-        q="test", source="fbi", category="deposition", page=1, per_page=20
-    )
+    fn.assert_called_once_with(q="test", source="fbi", category="deposition", page=1, per_page=20)
 
 
 # ── Flights ───────────────────────────────────────────────────
