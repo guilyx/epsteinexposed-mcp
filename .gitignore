@@ -10,27 +10,6 @@ build/
 venv/
 env/
 
-# ── Node.js ───────────────────────────────────────────────────
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-*.tsbuildinfo
-.next/
-out/
-coverage/
-.eslintcache
-# For Vite/React:
-dist/
-# For Svelte:
-.build/
-
-
-
 # ── IDE ───────────────────────────────────────────────────────
 .idea/
 .vscode/
@@ -50,6 +29,12 @@ Thumbs.db
 htmlcov/
 .coverage
 .coverage.*
+coverage.xml
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# ── Docs (VitePress) ─────────────────────────────────────────
+docs/node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
