@@ -4,7 +4,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "epstein-files-mcp"
+name = "epsteinexposed-mcp"
 version = "0.1.0"
 description = "MCP server wrapping the Epstein Exposed API"
 requires-python = ">=3.10"
@@ -28,4 +28,4 @@ testpaths = ["tests"]
 packages = ["src"]
 
 [project.scripts]
-epstein-mcp = "src.server:main"
+epsteinexposed-mcp = "src.server:main"

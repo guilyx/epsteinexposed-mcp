@@ -32,7 +32,7 @@ The MCP server supports two transport modes:
 ```bash
 python -m src.server
 # or
-epstein-mcp
+epsteinexposed-mcp
 ```
 
 Standard input/output — used by Claude Desktop, Cursor, and most MCP clients.
@@ -56,7 +56,7 @@ Add to your `claude_desktop_config.json`:
 {
   "mcpServers": {
     "epstein-files": {
-      "command": "epstein-mcp",
+      "command": "epsteinexposed-mcp",
       "args": []
     }
   }
@@ -71,7 +71,7 @@ Add to your `.cursor/mcp.json`:
 {
   "mcpServers": {
     "epstein-files": {
-      "command": "epstein-mcp",
+      "command": "epsteinexposed-mcp",
       "args": []
     }
   }
@@ -85,7 +85,7 @@ from smolagents import ToolCollection
 from mcp import StdioServerParameters
 
 server_params = StdioServerParameters(
-    command="epstein-mcp",
+    command="epsteinexposed-mcp",
     args=[],
 )
 

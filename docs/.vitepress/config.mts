@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
-  title: "epstein-files-mcp",
+  title: "epsteinexposed-mcp",
   description: "MCP server for querying the Epstein Exposed public API",
 
   head: [
@@ -47,12 +47,12 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: "github", link: "https://github.com/guilyx/epstein-files-mcp" },
+      { icon: "github", link: "https://github.com/guilyx/epsteinexposed-mcp" },
     ],
 
     footer: {
       message: "Released under the MIT License.",
-      copyright: "© 2026 — epstein-files-mcp",
+      copyright: "© 2026 — epsteinexposed-mcp",
     },
 
     search: {

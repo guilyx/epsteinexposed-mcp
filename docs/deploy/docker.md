@@ -19,20 +19,20 @@ RUN pip install --no-cache-dir .
 EXPOSE 8000
 
 # Default: stdio transport (for MCP clients)
-CMD ["epstein-mcp"]
+CMD ["epsteinexposed-mcp"]
 ```
 
 ## Build & Run
 
 ```bash
 # Build the image
-docker build -t epstein-files-mcp .
+docker build -t epsteinexposed-mcp .
 
 # Run with stdio transport (pipe to MCP client)
-docker run -i epstein-files-mcp
+docker run -i epsteinexposed-mcp
 
 # Run with SSE transport (for HTTP-based clients)
-docker run -p 8000:8000 epstein-files-mcp \
+docker run -p 8000:8000 epsteinexposed-mcp \
   python -c "from src.server import mcp; mcp.run(transport='sse', host='0.0.0.0', port=8000)"
 ```
 
@@ -42,7 +42,7 @@ Pass environment variables at runtime:
 
 ```bash
 docker run -e EPSTEIN_API_BASE_URL=https://custom-api.example.com/api \
-  -i epstein-files-mcp
+  -i epsteinexposed-mcp
 ```
 
 ## Docker Compose
@@ -52,7 +52,7 @@ If you're running this alongside other services (e.g., the LinkedStein backend):
 ```yaml
 services:
   epstein-mcp:
-    build: ./epstein-files-mcp
+    build: ./epsteinexposed-mcp
     environment:
       - EPSTEIN_API_BASE_URL=https://epsteinexposed.com/api
     stdin_open: true

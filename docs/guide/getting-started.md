@@ -9,8 +9,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/guilyx/epstein-files-mcp.git
-cd epstein-files-mcp
+git clone https://github.com/guilyx/epsteinexposed-mcp.git
+cd epsteinexposed-mcp
 
 # Install with dev dependencies
 pip install -e ".[dev]"

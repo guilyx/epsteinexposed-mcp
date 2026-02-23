@@ -10,7 +10,7 @@ Deploy the documentation site to [Vercel](https://vercel.com) for instant, globa
 ## Option A: One-Click Import
 
 1. Go to [vercel.com/new](https://vercel.com/new)
-2. Import the `guilyx/epstein-files-mcp` repository
+2. Import the `guilyx/epsteinexposed-mcp` repository
 3. Configure the build settings:
 
 | Setting            | Value              |
