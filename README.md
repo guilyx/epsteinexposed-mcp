@@ -2,6 +2,7 @@
 
 > Credits: Erwin Lejeune — 2026-02-22
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/37b6e2a72472442aa30e5ada23533598)](https://app.codacy.com/gh/guilyx/epsteinexposed-mcp?utm_source=github.com&utm_medium=referral&utm_content=guilyx/epsteinexposed-mcp&utm_campaign=Badge_Grade)
 [![CI](https://github.com/guilyx/epsteinexposed-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/guilyx/epsteinexposed-mcp/actions/workflows/ci.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/guilyx/epsteinexposed-mcp)](https://app.codacy.com/gh/guilyx/epsteinexposed-mcp/dashboard)
 [![codecov](https://codecov.io/gh/guilyx/epsteinexposed-mcp/graph/badge.svg)](https://codecov.io/gh/guilyx/epsteinexposed-mcp)
