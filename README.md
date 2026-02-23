@@ -1,10 +1,10 @@
-# epstein-files-mcp
+# epsteinexposed-mcp
 
 > Credits: Erwin Lejeune — 2026-02-22
 
-[![CI](https://github.com/guilyx/epstein-files-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/guilyx/epstein-files-mcp/actions/workflows/ci.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/guilyx/epstein-files-mcp)](https://app.codacy.com/gh/guilyx/epstein-files-mcp/dashboard)
-[![codecov](https://codecov.io/gh/guilyx/epstein-files-mcp/graph/badge.svg)](https://codecov.io/gh/guilyx/epstein-files-mcp)
+[![CI](https://github.com/guilyx/epsteinexposed-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/guilyx/epsteinexposed-mcp/actions/workflows/ci.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/guilyx/epsteinexposed-mcp)](https://app.codacy.com/gh/guilyx/epsteinexposed-mcp/dashboard)
+[![codecov](https://codecov.io/gh/guilyx/epsteinexposed-mcp/graph/badge.svg)](https://codecov.io/gh/guilyx/epsteinexposed-mcp)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![MCP](https://img.shields.io/badge/protocol-MCP-purple)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -48,7 +48,7 @@ Add to your `claude_desktop_config.json`:
 {
   "mcpServers": {
     "epstein-files": {
-      "command": "epstein-mcp",
+      "command": "epsteinexposed-mcp",
       "args": []
     }
   }
@@ -63,7 +63,7 @@ Add to `.cursor/mcp.json`:
 {
   "mcpServers": {
     "epstein-files": {
-      "command": "epstein-mcp",
+      "command": "epsteinexposed-mcp",
       "args": []
     }
   }
@@ -77,9 +77,9 @@ MCP Client (Claude, Cursor, SmolAgents)
     │
     │  JSON-RPC 2.0 (stdio / SSE)
     ▼
-epstein-files-mcp (FastMCP)
+epsteinexposed-mcp (FastMCP)
     │
-    │  AsyncEpsteinExposed (httpx)
+    │  AsyncEpsteinExposed (curl_cffi)
     ▼
 epsteinexposed.com/api/v1
 ```
@@ -89,15 +89,15 @@ Powered by the [`epsteinexposed`](https://github.com/guilyx/epsteinexposed) Pyth
 ## Development
 
 ```bash
-git clone https://github.com/guilyx/epstein-files-mcp.git
-cd epstein-files-mcp
+git clone https://github.com/guilyx/epsteinexposed-mcp.git
+cd epsteinexposed-mcp
 pip install -e ".[dev]"
 pytest -v
 ```
 
 ## Documentation
 
-Full docs available at the [docs site](https://guilyx.github.io/epstein-files-mcp) (VitePress).
+Full docs available at the [docs site](https://guilyx.github.io/epsteinexposed-mcp) (VitePress).
 
 ## License
 

@@ -29,6 +29,12 @@ Thumbs.db
 htmlcov/
 .coverage
 .coverage.*
+coverage.xml
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# ── Docs (VitePress) ─────────────────────────────────────────
+docs/node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/

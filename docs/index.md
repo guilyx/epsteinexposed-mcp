@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: "epstein-files-mcp"
+  name: "epsteinexposed-mcp"
   text: "The Epstein Files, at your fingertips."
   tagline: An MCP server that exposes the Epstein Exposed public API as tool calls for AI agents.
   actions:
@@ -14,7 +14,7 @@ hero:
       link: /api/tools
     - theme: alt
       text: GitHub
-      link: https://github.com/guilyx/epstein-files-mcp
+      link: https://github.com/guilyx/epsteinexposed-mcp
 
 features:
   - icon: 🔍
@@ -28,5 +28,5 @@ features:
     details: Built on the Model Context Protocol — plug directly into any MCP-compatible AI agent.
   - icon: ⚡
     title: Async & Fast
-    details: Powered by httpx and FastMCP — non-blocking I/O with clean tool interfaces.
+    details: Powered by curl_cffi and FastMCP — non-blocking I/O with clean tool interfaces.
 ---
