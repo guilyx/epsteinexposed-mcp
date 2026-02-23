@@ -10,14 +10,13 @@ description = "MCP server wrapping the Epstein Exposed API"
 requires-python = ">=3.10"
 dependencies = [
     "mcp[cli]>=1.0.0",
-    "epsteinexposed>=0.1.0",
+    "epsteinexposed>=0.2.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.24.0",
-    "respx>=0.22.0",
     "ruff>=0.7.0",
 ]
 
