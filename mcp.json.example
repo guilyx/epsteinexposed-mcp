@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "epsteinexposed-mcp": {
+      "command": "python",
+      "args": [
+        "-m",
+        "src.server"
+      ],
+      "cwd": "/ABSOLUTE/PATH/TO/epsteinexposed-mcp",
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}
